@@ -1,0 +1,9 @@
+{% set rkhunter = salt['grains.filter_by']({
+    'RedHat': {
+        'package': 'rkhunter',
+        'conf_file': '/etc/rkhunter.conf',
+        'admin_email': 'root@localhost',
+        'baseline_lock': '/var/run/rkhunter_baseline',
+        'base_url': 'http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1',
+    },
+}, merge=salt['pillar.get']('rkhunter:lookup')) %}
