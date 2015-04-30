@@ -21,10 +21,19 @@ rkhunter:
     - require:
       - pkg: {{ rkhunter.package }}
 
-rkhunter_baseline:
+/usr/local/rkhunter_baseline.sh:
+  file.managed:
+    - user: root
+    - group: root
+    - mode: 755
+    - source: salt://rkhunter/files/baseline.sh
+    - template: jinja
+    - require:
+      - pkg: {{ rkhunter.package }}
+
+rkhunter_baseline_run:
   cmd.run:
-    - name: rkhunter --update && rkhunter --propupd && touch {{ rkhunter.baseline_lock }}
-    - unless: ls {{ rkhunter.baseline_lock }}
+    - name: bash -x /usr/local/rkhunter_baseline.sh
     - use_vt: True
     - require:
       - file: /etc/rkhunter.conf
