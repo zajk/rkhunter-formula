@@ -3,15 +3,10 @@ rkhunter-formula
 
 Installs and runs baseline run for rkhunter. It uses default mail command to send emails, so make sure you have SMTP relay setup.
 
-.. note::
-
-   Contributions are welcome.
+Contributions are welcome.
 
 Available states
 ================
-
-.. contents::
-    :local:
 
 ``rkhunter``
 ------------
