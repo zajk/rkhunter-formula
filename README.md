@@ -3,17 +3,12 @@ rkhunter-formula
 
 Installs and runs baseline run for rkhunter. It uses default mail command to send emails, so make sure you have SMTP relay setup.
 
-.. note::
-
-   Contributions are welcome.
+Contributions are welcome.
 
    Test on Centos 6.5, could work on RedHat family distributions.
 
 Available states
 ================
-
-.. contents::
-    :local:
 
 ``rkhunter``
 ------------
