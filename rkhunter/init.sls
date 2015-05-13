@@ -33,7 +33,8 @@ rkhunter:
 
 rkhunter_baseline_run:
   cmd.run:
-    - name: bash -x /usr/local/rkhunter_baseline.sh
+    - name: bash /usr/local/rkhunter_baseline.sh
+    - unless: ls /var/run/rkhunter_baseline
     - use_vt: True
     - require:
       - file: /etc/rkhunter.conf
