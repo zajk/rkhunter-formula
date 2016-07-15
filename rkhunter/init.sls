@@ -4,24 +4,36 @@
 repoforge:
   pkg.installed:
     - sources:
-      - rpmforge-release: {{ rkhunter.base_url }}.el{{ grains['osmajorrelease'] }}.rf.{{ grains['cpuarch'] }}.rpm
-{%- endif %}
-
+      - rpmforge-release: {{ rkhunter.lookup.base_url }}.el{{ grains['osmajorrelease'] }}.rf.{{ grains['cpuarch'] }}.rpm
+{% else %}
 rkhunter:
   pkg.installed:
-    - name: {{ rkhunter.package }}
+    - pkgs: {{ rkhunter.lookup.packages }}
+{%- endif %}
 
-{{ rkhunter.conf_file }}:
+{{ rkhunter.lookup.conf_file }}:
   file.managed:
     - user: root
     - group: root
-    - mode: 0644
-    - source: salt://rkhunter/files/rkhunter.conf
+    - mode: 0600
+    - source: salt://rkhunter/templates/rkhunter.conf.jinja
     - template: jinja
     - require:
-      - pkg: {{ rkhunter.package }}
+      - pkg: rkhunter
 
-/usr/local/rkhunter_baseline.sh:
+{% if rkhunter.lookup.get('defaults_file', False) -%}
+{{ rkhunter.lookup.defaults_file }}:
+  file.managed:
+    - user: root
+    - group: root
+    - mode: 0600
+    - source: salt://rkhunter/templates/debian/defaults.jinja
+    - template: jinja
+    - require:
+      - pkg: rkhunter
+{%- endif %}
+
+/usr/local/bin/rkhunter_baseline.sh:
   file.managed:
     - user: root
     - group: root
@@ -29,12 +41,12 @@ rkhunter:
     - source: salt://rkhunter/files/baseline.sh
     - template: jinja
     - require:
-      - pkg: {{ rkhunter.package }}
+      - pkg: rkhunter
 
 rkhunter_baseline_run:
   cmd.run:
-    - name: bash /usr/local/rkhunter_baseline.sh
-    - unless: ls /var/run/rkhunter_baseline
+    - name: bash /usr/local/bin/rkhunter_baseline.sh
+    - unless: ls /var/lib/rkhunter_baseline
     - use_vt: True
     - require:
-      - file: /etc/rkhunter.conf
+      - file: {{ rkhunter.lookup.conf_file }}

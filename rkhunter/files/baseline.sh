@@ -1,7 +1,7 @@
 {% from "rkhunter/map.jinja" import rkhunter with context -%}
 #!/bin/bash
 
-LOCK_FILE='/var/run/rkhunter_baseline'
+LOCK_FILE='/var/lib/rkhunter_baseline'
 
 if [ ! -f $LOCK_FILE ]; then
 	rkhunter --versioncheck --update --propupd --nocolors > /tmp/rkhunter.tmp
