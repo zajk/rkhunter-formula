@@ -1,3 +1,6 @@
+#!jinja|yaml
+# vi: set ft=yaml.jinja :
+
 {% from "rkhunter/map.jinja" import rkhunter with context -%}
 
 {%- if grains['os_family'] == 'RedHat' %}
