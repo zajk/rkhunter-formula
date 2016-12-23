@@ -1,3 +1,42 @@
 rkhunter:
+  email: 'admin@example.com',
+
+  # This is currently Debian only.
+  defaults:
+    cron_daily_run: "true"
+    cron_db_update: "true"
+    report_email: 'admin@example.com'
+    apt_autogen: "true"
+    nice: "19"
+
+  allowhiddendir:
+    byobu:
+      - /dev/shm/byobu-*-????????/.last.tmux
+
+  allowdevfile:
+    byobu:
+      - /dev/shm/byobu-*-????????/.last.tmux/*
+      - /dev/shm/byobu-*-????????/*/*
+      - /dev/shm/byobu-*-????????/*
+      - /dev/shm/sem.*
+
+  xinetd_allowed_svc:
+    check_mk:
+      - /etc/xinetd.d/check_mk
+
+  disable_tests: suspscan hidden_procs deleted_files packet_cap_apps apps
+
+# If you want unhide.rb - which requires ruby to be installed and which is a lot faster
+# instead of unhide
+rkhunter:
   lookup:
-    email: 'admin@example.com',
+    packages:
+      - unhide.rb
+      - lsof
+      - bsd-mailx
+      - wget
+      - rkhunter
+
+  scriptwhitelist:
+    unhide_rb:
+      - /usr/bin/unhide.rb

@@ -1,9 +1,65 @@
-{% set rkhunter = salt['grains.filter_by']({
+{% set rkhunter  = salt['pillar.get']('rkhunter', {
+  'lookup': salt['grains.filter_by']({
     'RedHat': {
-        'package': 'rkhunter',
-        'conf_file': '/etc/rkhunter.conf',
-        'email': 'admin@example.com',
-        'baseline_lock': '/var/run/rkhunter_baseline',
-        'base_url': 'http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1',
+      'packages': [
+        'rkhunter'
+      ],
+
+      'conf_file': '/etc/rkhunter.conf',
+
+      'base_url': 'This is RedHat only and untested.',
+      'base_url': 'http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1',
+
+      'scriptwhitelist': [
+        '/bin/egrep',
+        '/bin/fgrep',
+        '/bin/which',
+        '/usr/bin/groups',
+        '/usr/bin/ldd',
+        '/usr/sbin/adduser'
+      ]
     },
-}, merge=salt['pillar.get']('rkhunter:lookup')) %}
+    'Debian': {
+      'packages': [
+        'unhide',
+        'lsof',
+        'bsd-mailx',
+        'wget',
+        'rkhunter',
+      ],
+
+      'conf_file': '/etc/rkhunter.conf',
+      'defaults_file': '/etc/default/rkhunter',
+
+      'scriptwhitelist': [
+        '/bin/egrep',
+        '/bin/fgrep',
+        '/bin/which',
+        '/usr/bin/groups',
+        '/usr/bin/ldd',
+        '/usr/sbin/adduser'
+      ]
+    }
+  }),
+
+  'email': 'root',
+
+  'defaults': "This is currently Debian only",
+  'defaults': {
+    'cron_daily_run': "",
+    'cron_db_update': "",
+    'report_email': "root",
+    'db_update_email': 'false',
+    'apt_autogen': 'false',
+    'nice': '0',
+    'run_check_on_battery': 'false'
+  },
+
+  'scriptwhitelist': {},
+  'allowdevfile': {},
+  'allowhiddendir': {},
+  'xinetd_allowed_svc': {},
+
+  'disable_tests': 'suspscan hidden_procs deleted_files packet_cap_apps apps'
+
+}, merge=True) %}
